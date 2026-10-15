@@ -2,7 +2,7 @@ import cv2
 import matplotlib.pyplot as plt
 
 #1.이미지 로드
-img=cv2.imread("2026-10-13.jpg")
+img=cv2.imread("261014_1_data/2026-10-13.jpg")
 
 #이미지 증강
 img_bright=cv2.convertScaleAbs(img, alpha=1, beta=50)

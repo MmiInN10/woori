@@ -3,7 +3,7 @@ import cv2
 #1.모델 로드
 #2.모델 추론
 model = YOLO("yolo11m.pt")
-result=model("C:/Users/Woori/Desktop/woori/input/input_video.mp4")
+result=model("261014_2_yolo_data/input_pose.jpg")
 #3.결과 시각화
 result_image=result[0].plot()
 #4.결과 이미지 저장

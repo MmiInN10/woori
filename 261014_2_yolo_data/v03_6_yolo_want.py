@@ -16,3 +16,4 @@ model(
 )
 
 # COCO 사전 학습 모델에서 cake만 탐지하도록 classes=[55]로 제한
+print(model.names)
