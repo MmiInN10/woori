@@ -1,0 +1,54 @@
+from ultralytics import solutions
+import cv2
+
+#1.비디오 경로 설정
+cap=cv2.VideoCapture("261016_4_yolo_advan/heatmap_video.mp4")
+
+#2.모델 로드
+distance=solutions.DistanceCalculation(
+    model="yolo11n.pt",
+    conf=0.03,
+    show=False#창은 아래에서 직접 띄움(True면 창이 두 개 뜸)
+)
+
+#클릭으로 두 객체를 선택할 수 있게 내 창에 마우스 콜백 연결
+cv2.namedWindow("distance")
+cv2.setMouseCallback("distance", distance.mouse_event_for_distance)
+
+#3.프레임 처리
+while cap.isOpened():
+    success, frame = cap.read()
+    if not success:
+        print("프레임 읽기 실패")
+        break
+    #3-1.모델 추론
+    # results=distance(frame)
+    results=distance.process(frame)
+    
+    #3-2.거리 추출
+    pixel_distance=results.pixels_distance    
+
+    #3-3.거리에 따른 정의
+    if pixel_distance is None or pixel_distance ==0:
+        print("[거리] ----px [상태] 입력 안됨")
+        continue
+    
+    if pixel_distance==150:
+        status="Safe"
+    elif pixel_distance>=100:
+        status="Warning"
+    else:
+        status="Danger"
+
+    print(f"[거리] {pixel_distance}, [상태]: {status}")
+    cv2.imshow("distance", results.plot_im)
+
+    #3-4.q키로 종료
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        print("q키를 눌러서 종료")
+        break
+    
+#4.자원 해제
+cap.release()
+cv2.destroyAllWindows()
+
