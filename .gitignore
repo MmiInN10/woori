@@ -2,4 +2,9 @@
 *.MP4
 *.jpg
 *.JPG
+*.png
 *.pt
+*.npy
+*.zip
+.env
+*.txt
