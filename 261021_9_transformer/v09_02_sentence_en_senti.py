@@ -1,0 +1,28 @@
+from transformers import pipeline
+
+#1.감정 분석 파이프라인 생성
+classifier=pipeline("sentiment-analysis")
+
+#2.분석할 문장 입력
+#2-1.긍정 문장
+# text="I'm feeling really great today."
+#출력:문장 분석 결과 : POSITIVE
+     #문장 분석 점수 : 0.9999
+
+#2-2.부정 문장
+# text="I'm so upset."
+#출력:문장 분석 결과 : NEGATIVE
+     #문장 분석 점수 : 0.9981
+
+#2-3.부정 단어
+text="hate"
+#출력:문장 분석 결과 : NEGATIVE
+     #문장 분석 점수 : 0.9997
+
+
+#3.문장 분석
+results=classifier(text)
+
+#4.결과 확인
+print(f"문장 분석 결과 : {results[0]['label']}")    # POSITIVE, NAGATIVE
+print(f"문장 분석 점수 : {results[0]['score']:.4f}")    # 1에 가까울수록 모델 확신도 높음
