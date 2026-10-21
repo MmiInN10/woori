@@ -1,10 +1,54 @@
+# 비밀키 / 환경변수
+.env
+*.env
+*key*.txt
+*.pem
+
+# 이미지 / 영상 / 데이터
 *.mp4
 *.MP4
+*.avi
+*.mov
 *.jpg
 *.JPG
+*.jpeg
 *.png
-*.pt
 *.npy
 *.zip
-.env
+*.csv
+
+# 모델 가중치
+*.pt
+*.pth
+*.onnx
+*.bin
+*.safetensors
+*.ckpt
+
+# 텍스트 (필요한 건 git add -f 로 강제 추가)
 *.txt
+
+# 에디터 / 툴 설정
+.vscode/
+.claude/
+.idea/
+
+# 라이브러리 생성물 / 캐시
+.gradio/
+.streamlit/
+streamlit
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.cache/
+.huggingface/
+
+# 결과물 / 실험 폴더
+runs/
+_archive/
+sahi/
+demo_data/
+images/
+input/
+weights/
+yolo11n_openvino_model/

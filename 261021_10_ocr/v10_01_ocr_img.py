@@ -53,7 +53,7 @@ hello@reallygreatsite.com
 #2.다른 ORY비교
 
 reader = easyocr.Reader(['ko', 'en'])
-results = reader.readtext("261021_10_ocr/input3.jpg")
+results = reader.readtext("261021_10_ocr/input4.jpg")
 for box, text, conf in results:
     print(text)
 ''' 
