@@ -1,0 +1,212 @@
+:root {
+  --bg: linear-gradient(135deg, #ffd1d1, #ffe3c2, #fff4b8, #d3f4da, #cde4ff, #dad3ff, #f0d2ff);
+  --card: rgba(255, 255, 255, 0.72);
+  --card-border: rgba(255, 255, 255, 0.85);
+  --shadow: 0 24px 60px rgba(120, 90, 200, 0.28);
+  --text: #1f1d36;
+  --muted: #5f5d7a;
+  --display-bg: rgba(255, 255, 255, 0.6);
+  --key-bg: rgba(255, 255, 255, 0.8);
+  --key-text: #1f1d36;
+  --toggle-bg: rgba(255, 255, 255, 0.85);
+  --error: #c1121f;
+}
+
+[data-theme="dark"] {
+  --bg: linear-gradient(135deg, #4a1d2b, #4a2f1a, #43401a, #1b4030, #1b3366, #2d2170, #4a1f66);
+  --card: rgba(18, 16, 48, 0.78);
+  --card-border: rgba(255, 255, 255, 0.14);
+  --shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+  --text: #f3f2ff;
+  --muted: #b4b2d6;
+  --display-bg: rgba(255, 255, 255, 0.07);
+  --key-bg: rgba(255, 255, 255, 0.12);
+  --key-text: #f3f2ff;
+  --toggle-bg: rgba(255, 255, 255, 0.14);
+  --error: #ff8b94;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Pretendard", "Malgun Gothic", "Apple SD Gothic Neo", system-ui, sans-serif;
+  transition: color 0.3s;
+}
+
+.calculator {
+  position: relative;
+  width: min(100%, 360px);
+  padding: 64px 18px 18px;
+  border-radius: 28px;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+.calculator::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 6px;
+  background: linear-gradient(90deg, #e5383b, #f77f00, #ffd60a, #2fbf71, #2f6fed, #5c4bd6, #9d4edd);
+}
+
+.theme-toggle {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--toggle-bg);
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.15s;
+}
+
+.theme-toggle:hover {
+  transform: rotate(15deg) scale(1.08);
+}
+
+.display {
+  min-height: 112px;
+  margin-bottom: 14px;
+  padding: 12px 16px;
+  border-radius: 20px;
+  background: var(--display-bg);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  text-align: right;
+  overflow: hidden;
+  transition: background 0.3s;
+}
+
+.display__expression {
+  min-height: 1.4em;
+  max-width: 100%;
+  color: var(--muted);
+  font-size: 1rem;
+  white-space: nowrap;
+  overflow: hidden; /* 길어지면 script.js가 오른쪽 끝(최근 입력)으로 스크롤한다 */
+}
+
+.display__result {
+  max-width: 100%;
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.display__result[data-size="s"] {
+  font-size: 2rem;
+}
+
+.display__result[data-size="xs"] {
+  font-size: 1.5rem;
+}
+
+.display__result.is-error {
+  color: var(--error);
+  font-size: 1.35rem;
+}
+
+.keys {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.key {
+  --k: var(--key-bg);
+  --kt: var(--key-text);
+  height: 62px;
+  border: 0;
+  border-radius: 18px;
+  background: var(--k);
+  color: var(--kt);
+  font: inherit;
+  font-size: 1.4rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s, transform 0.1s, filter 0.15s;
+}
+
+.key[data-action="op"] {
+  font-size: 1.7rem;
+}
+
+.key:hover {
+  filter: brightness(1.08);
+}
+
+.key:active {
+  transform: scale(0.95);
+}
+
+.key:focus-visible,
+.theme-toggle:focus-visible {
+  outline: 3px solid var(--text);
+  outline-offset: 2px;
+}
+
+.key--red { --k: #e5383b; --kt: #fff; }
+.key--orange { --k: #f77f00; --kt: #1b1200; }
+.key--yellow { --k: #ffd60a; --kt: #1b1700; }
+.key--green { --k: #2fbf71; --kt: #04210f; }
+.key--blue { --k: #2f6fed; --kt: #fff; }
+.key--indigo { --k: #5c4bd6; --kt: #fff; }
+.key--violet { --k: #9d4edd; --kt: #fff; }
+
+/* 버튼을 누르면(키보드 포함) 자기 색으로 반짝인다. */
+.spark {
+  animation: spark 0.45s ease-out;
+}
+
+@keyframes spark {
+  0% {
+    box-shadow: 0 0 0 0 var(--k, #ff9f1c);
+    filter: brightness(1.45);
+  }
+  100% {
+    box-shadow: 0 0 0 14px transparent;
+    filter: brightness(1);
+  }
+}
+
+@media (max-width: 360px) {
+  .key {
+    height: 54px;
+    font-size: 1.25rem;
+  }
+
+  .display__result {
+    font-size: 2.2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}

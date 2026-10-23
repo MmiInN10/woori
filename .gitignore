@@ -25,7 +25,7 @@
 *.safetensors
 *.ckpt
 
-# 텍스트 (필요한 건 git add -f 로 강제 추가)
+# 텍스트
 *.txt
 
 # 에디터 / 툴 설정
@@ -43,7 +43,7 @@ __pycache__/
 .cache/
 .huggingface/
 
-# 결과물 / 실험 폴더
+# 결과물 / 실험 폴더 (폴더명은 점(.) 없이, 끝에 /)
 runs/
 _archive/
 sahi/

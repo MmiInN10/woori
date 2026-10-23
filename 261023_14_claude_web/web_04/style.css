@@ -1,0 +1,176 @@
+:root {
+  --paper: #e8e8e6;
+  --body: #cfcfcd;
+  --key: #f2f2f0;
+  --key-edge: #a9a9a7;
+  --ink: #111111;
+  --ink-soft: #5a5a58;
+  --screen: #1a1a1a;
+  --screen-ink: #ededed;
+  --screen-dim: #8c8c8a;
+  --op: #111111;
+  --op-ink: #f2f2f0;
+  --op-edge: #000000;
+  --radius: 14px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Archivo", sans-serif;
+}
+
+.stage {
+  min-height: 100vh;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 32px;
+  padding: 48px 16px;
+}
+
+/* 본체 */
+.calc {
+  width: 100%;
+  max-width: 360px;
+  padding: 20px;
+  background: var(--body);
+  border-radius: 22px;
+  box-shadow: 0 2px 0 #fff inset, 0 18px 0 -8px #b5b5b3, 0 28px 40px -18px rgba(0, 0, 0, 0.35);
+}
+
+/* 표시부: 이 화면에서 가장 기억에 남아야 하는 부분 */
+.display {
+  height: 148px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: var(--screen);
+  color: var(--screen-ink);
+  border-radius: var(--radius);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.6) inset;
+  font-family: "JetBrains Mono", monospace;
+  overflow: hidden;
+}
+
+.expression {
+  min-height: 1.4em;
+  font-size: 0.95rem;
+  color: var(--screen-dim);
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.result {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.result.small { font-size: 2rem; }
+.result.tiny { font-size: 1.4rem; }
+.result.error { font-size: 1.1rem; font-family: "Archivo", sans-serif; font-weight: 500; line-height: 1.3; white-space: normal; }
+
+/* 키패드 */
+.keys {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.key {
+  height: 62px;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--key);
+  color: var(--ink);
+  font: 700 1.35rem "JetBrains Mono", monospace;
+  cursor: pointer;
+  box-shadow: 0 5px 0 var(--key-edge);
+  transition: transform 0.06s ease, box-shadow 0.06s ease;
+}
+
+.key.fn { background: #dededc; }
+.key.op { background: var(--op); color: var(--op-ink); box-shadow: 0 5px 0 var(--op-edge); }
+
+.key:active,
+.key.pressed {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 var(--key-edge);
+}
+.key.op:active,
+.key.op.pressed { box-shadow: 0 1px 0 var(--op-edge); }
+
+.key:focus-visible,
+.history-clear:focus-visible,
+.history-item:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
+}
+
+/* 기록 */
+.history {
+  width: 100%;
+  max-width: 360px;
+  min-height: 200px;
+}
+
+.history-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--ink);
+}
+
+.history-head h2 { margin: 0; font-size: 1.1rem; }
+
+.history-clear {
+  border: 0;
+  background: none;
+  color: var(--ink-soft);
+  font: 500 0.9rem "Archivo", sans-serif;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.history-list { list-style: none; margin: 0; padding: 0; }
+
+.history-empty { padding: 16px 0; color: var(--ink-soft); }
+
+.history-item {
+  display: block;
+  width: 100%;
+  padding: 12px 0;
+  border: 0;
+  border-bottom: 1px solid var(--key-edge);
+  background: none;
+  text-align: left;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.history-item .eq { display: block; font-size: 0.85rem; color: var(--ink-soft); overflow-wrap: anywhere; }
+.history-item .val { display: block; font-size: 1.25rem; font-weight: 700; overflow-wrap: anywhere; }
+.history-item:hover .val { text-decoration: underline; }
+
+@media (min-width: 800px) {
+  .stage { flex-wrap: nowrap; align-items: flex-start; padding-top: 72px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .key { transition: none; }
+}

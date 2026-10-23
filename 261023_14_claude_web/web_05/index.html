@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>계산기</title>
+  <meta name="description" content="키보드로도 쓸 수 있고, 계산 기록이 남는 간단한 계산기.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="nav">
+    <div class="nav__inner">
+      <a class="nav__brand" href="#top" aria-label="계산기 홈">
+        <span class="nav__mark" aria-hidden="true">=</span>
+        <span>계산기</span>
+      </a>
+      <nav class="nav__links" aria-label="바로가기">
+        <a href="#features">기능</a>
+        <a href="#history">기록</a>
+      </nav>
+      <a class="btn btn--utility" href="#calculator">계산 시작</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="stickers" aria-hidden="true">
+        <span class="sticker sticker--pink"></span>
+        <span class="sticker sticker--orange"></span>
+        <span class="sticker sticker--teal"></span>
+        <span class="sticker sticker--purple"></span>
+        <span class="sticker sticker--sky"></span>
+        <span class="sticker sticker--green"></span>
+      </div>
+
+      <div class="hero__inner">
+        <div class="hero__copy">
+          <h1>계산은 빠르게,<br>기록은 차분하게.</h1>
+          <p>숫자를 누르거나 키보드로 입력하세요. 계산한 내용은 자동으로 남아서 다시 꺼내 쓸 수 있어요.</p>
+        </div>
+
+        <div class="workspace" id="calculator">
+          <section class="calc card card--elevated" aria-label="계산기">
+            <div class="display" role="group" aria-label="계산 결과">
+              <div class="display__expr" id="expr" aria-hidden="true"></div>
+              <output class="display__value" id="value" aria-live="polite">0</output>
+            </div>
+
+            <div class="keys" id="keys">
+              <button class="key key--fn" data-action="clear" aria-label="모두 지우기">AC</button>
+              <button class="key key--fn" data-action="sign" aria-label="부호 바꾸기">±</button>
+              <button class="key key--fn" data-action="percent" aria-label="퍼센트">%</button>
+              <button class="key key--op" data-op="/" aria-label="나누기">÷</button>
+
+              <button class="key" data-digit="7">7</button>
+              <button class="key" data-digit="8">8</button>
+              <button class="key" data-digit="9">9</button>
+              <button class="key key--op" data-op="*" aria-label="곱하기">×</button>
+
+              <button class="key" data-digit="4">4</button>
+              <button class="key" data-digit="5">5</button>
+              <button class="key" data-digit="6">6</button>
+              <button class="key key--op" data-op="-" aria-label="빼기">−</button>
+
+              <button class="key" data-digit="1">1</button>
+              <button class="key" data-digit="2">2</button>
+              <button class="key" data-digit="3">3</button>
+              <button class="key key--op" data-op="+" aria-label="더하기">+</button>
+
+              <button class="key" data-digit="0">0</button>
+              <button class="key" data-action="dot" aria-label="소수점">.</button>
+              <button class="key key--fn" data-action="back" aria-label="한 칸 지우기">⌫</button>
+              <button class="key key--eq" data-action="equals" aria-label="계산하기">=</button>
+            </div>
+          </section>
+
+          <aside class="history card" id="history" aria-label="계산 기록">
+            <div class="history__head">
+              <h2>계산 기록</h2>
+              <button class="btn btn--utility" id="clearHistory" type="button">기록 지우기</button>
+            </div>
+            <ul class="history__list" id="historyList"></ul>
+            <div class="empty" id="historyEmpty">
+              <div class="empty__art" aria-hidden="true">
+                <span></span><span></span><span></span>
+              </div>
+              <p class="empty__title">아직 계산한 내용이 없어요</p>
+              <p class="empty__hint">= 를 누르면 여기에 남아요.</p>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="features" id="features">
+      <h2>쓰기 편하게 만들었어요</h2>
+      <div class="features__grid">
+        <article class="card feature">
+          <div class="feature__band feature__band--pink"></div>
+          <h3>키보드로 바로 입력</h3>
+          <p>숫자와 + − * / 키로 입력하고, Enter로 계산해요. Backspace는 한 칸 지우기, Esc는 모두 지우기예요.</p>
+        </article>
+        <article class="card feature">
+          <div class="feature__band feature__band--teal"></div>
+          <h3>기록이 그대로 남아요</h3>
+          <p>최근 20건을 이 브라우저에 저장해요. 새로고침해도 사라지지 않고, 누르면 결과를 다시 불러와요.</p>
+        </article>
+        <article class="card feature">
+          <div class="feature__band feature__band--orange"></div>
+          <h3>휴대폰에서도 편하게</h3>
+          <p>버튼이 손가락에 맞게 커지고, 기록은 계산기 아래로 내려가요.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__inner">
+      <span>계산기</span>
+      <span>계산 기록은 이 브라우저에만 저장돼요.</span>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>계산기</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #fbcfe8, #f9a8d4);
+    font-family: "Segoe UI", "Malgun Gothic", sans-serif;
+  }
+  .calculator {
+    width: 340px;
+    padding: 20px;
+    background: #fdf2f8;
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(190, 24, 93, 0.3);
+  }
+  .display {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    text-align: right;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+  }
+  .history { color: #be7a9f; font-size: 14px; min-height: 20px; word-break: break-all; }
+  .current { color: #831843; font-size: 40px; font-weight: 600; word-break: break-all; }
+  .keys { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  button {
+    height: 64px;
+    border: none;
+    border-radius: 12px;
+    font-size: 22px;
+    color: #831843;
+    background: #f9a8d4;
+    cursor: pointer;
+    transition: transform 0.05s, filter 0.15s;
+  }
+  button:hover { filter: brightness(1.2); }
+  button:active { transform: scale(0.95); }
+  button.op { color: #fff; background: #ec4899; }
+  button.fn { color: #fff; background: #f472b6; }
+  button.eq { color: #fff; background: #be185d; }
+  button.zero { grid-column: span 2; }
+</style>
+</head>
+<body>
+<div class="calculator">
+  <div class="display">
+    <div class="history" id="history"></div>
+    <div class="current" id="current">0</div>
+  </div>
+  <div class="keys">
+    <button class="fn" data-action="clear">AC</button>
+    <button class="fn" data-action="sign">±</button>
+    <button class="fn" data-action="percent">%</button>
+    <button class="op" data-op="/">÷</button>
+
+    <button data-num="7">7</button>
+    <button data-num="8">8</button>
+    <button data-num="9">9</button>
+    <button class="op" data-op="*">×</button>
+
+    <button data-num="4">4</button>
+    <button data-num="5">5</button>
+    <button data-num="6">6</button>
+    <button class="op" data-op="-">−</button>
+
+    <button data-num="1">1</button>
+    <button data-num="2">2</button>
+    <button data-num="3">3</button>
+    <button class="op" data-op="+">+</button>
+
+    <button class="zero" data-num="0">0</button>
+    <button data-action="dot">.</button>
+    <button class="eq" data-action="equals">=</button>
+  </div>
+</div>
+
+<script>
+  const currentEl = document.getElementById("current");
+  const historyEl = document.getElementById("history");
+  const symbols = { "/": "÷", "*": "×", "-": "−", "+": "+" };
+
+  let current = "0";
+  let previous = null;
+  let operator = null;
+  let overwrite = false; // 다음 숫자 입력 시 화면을 덮어쓸지 여부
+
+  function format(str) {
+    if (str === "오류") return str;
+    const [int, dec] = str.split(".");
+    const sign = int.startsWith("-") ? "-" : "";
+    const digits = int.replace("-", "");
+    const withComma = digits.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return sign + withComma + (dec !== undefined ? "." + dec : "");
+  }
+
+  function render() {
+    currentEl.textContent = format(current);
+    currentEl.style.fontSize = current.length > 12 ? "24px" : current.length > 8 ? "32px" : "40px";
+    historyEl.textContent = operator ? `${format(previous)} ${symbols[operator]}` : "";
+  }
+
+  function compute(a, b, op) {
+    a = parseFloat(a); b = parseFloat(b);
+    let r;
+    switch (op) {
+      case "+": r = a + b; break;
+      case "-": r = a - b; break;
+      case "*": r = a * b; break;
+      case "/": if (b === 0) return "오류"; r = a / b; break;
+    }
+    return String(parseFloat(r.toPrecision(12)));
+  }
+
+  function inputNum(n) {
+    if (current === "오류") clearAll();
+    if (overwrite || current === "0") { current = n; overwrite = false; }
+    else if (current.replace(/[-.]/g, "").length < 15) current += n;
+    render();
+  }
+
+  function inputDot() {
+    if (current === "오류") clearAll();
+    if (overwrite) { current = "0."; overwrite = false; }
+    else if (!current.includes(".")) current += ".";
+    render();
+  }
+
+  function inputOp(op) {
+    if (current === "오류") return;
+    if (operator && !overwrite) {
+      current = compute(previous, current, operator);
+      if (current === "오류") { operator = null; previous = null; render(); return; }
+    }
+    previous = current;
+    operator = op;
+    overwrite = true;
+    render();
+  }
+
+  function equals() {
+    if (!operator || current === "오류") return;
+    const result = compute(previous, current, operator);
+    historyEl.textContent = `${format(previous)} ${symbols[operator]} ${format(current)} =`;
+    current = result;
+    previous = null;
+    operator = null;
+    overwrite = true;
+    currentEl.textContent = format(current);
+  }
+
+  function clearAll() {
+    current = "0"; previous = null; operator = null; overwrite = false;
+    render();
+  }
+
+  function toggleSign() {
+    if (current === "0" || current === "오류") return;
+    current = current.startsWith("-") ? current.slice(1) : "-" + current;
+    render();
+  }
+
+  function percent() {
+    if (current === "오류") return;
+    current = String(parseFloat((parseFloat(current) / 100).toPrecision(12)));
+    render();
+  }
+
+  function backspace() {
+    if (overwrite || current === "오류") return;
+    current = current.length > 1 && !(current.length === 2 && current.startsWith("-"))
+      ? current.slice(0, -1) : "0";
+    render();
+  }
+
+  document.querySelector(".keys").addEventListener("click", (e) => {
+    const b = e.target.closest("button");
+    if (!b) return;
+    if (b.dataset.num !== undefined) inputNum(b.dataset.num);
+    else if (b.dataset.op) inputOp(b.dataset.op);
+    else switch (b.dataset.action) {
+      case "clear": clearAll(); break;
+      case "sign": toggleSign(); break;
+      case "percent": percent(); break;
+      case "dot": inputDot(); break;
+      case "equals": equals(); break;
+    }
+  });
+
+  // 키보드 지원
+  document.addEventListener("keydown", (e) => {
+    if (/^\d$/.test(e.key)) inputNum(e.key);
+    else if (e.key === ".") inputDot();
+    else if ("+-*/".includes(e.key)) inputOp(e.key);
+    else if (e.key === "Enter" || e.key === "=") { e.preventDefault(); equals(); }
+    else if (e.key === "Backspace") backspace();
+    else if (e.key === "Escape" || e.key === "Delete") clearAll();
+    else if (e.key === "%") percent();
+  });
+
+  render();
+</script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+:root {
+  --bg: #f2f3f7;
+  --panel: #ffffff;
+  --text: #1c1d22;
+  --key: #eceef4;
+  --key-active: #dde0ea;
+  --fn: #d6dae6;
+  --op: #4f6bed;
+  --op-text: #ffffff;
+  --muted: #7a7f90;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14151a;
+    --panel: #1e2027;
+    --text: #f1f2f6;
+    --key: #2a2d37;
+    --key-active: #353945;
+    --fn: #3a3e4b;
+    --op: #5b76ff;
+    --muted: #8b90a1;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", "Malgun Gothic", sans-serif;
+}
+
+.calculator {
+  width: 100%;
+  max-width: 360px;
+  padding: 16px;
+  border-radius: 24px;
+  background: var(--panel);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.display {
+  min-height: 110px;
+  padding: 12px 8px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.expression {
+  min-height: 1.4em;
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+.current {
+  max-width: 100%;
+  font-size: 2.8rem;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.keys {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+button {
+  height: 64px;
+  border: 0;
+  border-radius: 16px;
+  background: var(--key);
+  color: var(--text);
+  font: inherit;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: background 0.1s, transform 0.05s;
+}
+
+button {
+  position: relative;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (hover: hover) {
+  button:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); }
+}
+
+button:active { background: var(--key-active); transform: scale(0.93); box-shadow: none; }
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.3;
+  transform: scale(0);
+  pointer-events: none;
+  animation: ripple 0.5s ease-out forwards;
+}
+
+@keyframes ripple {
+  to { transform: scale(1); opacity: 0; }
+}
+
+#fireworks {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.current.pop { animation: pop 0.15s ease-out; }
+
+@keyframes pop {
+  from { transform: scale(0.94); opacity: 0.6; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ripple, .current.pop { animation: none; }
+  button { transition: none; }
+}
+button:focus-visible { outline: 2px solid var(--op); outline-offset: 2px; }
+
+button.fn { background: var(--fn); }
+button.op, button.eq { background: var(--op); color: var(--op-text); }
+button.op.selected { outline: 3px solid var(--text); outline-offset: -3px; }
+button.op:active, button.eq:active { filter: brightness(0.9); }
+
+@media (max-width: 380px) {
+  button { height: 56px; font-size: 1.25rem; }
+  .current { font-size: 2.3rem; }
+}
